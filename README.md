@@ -22,7 +22,7 @@ k3d cluster create dev-cluster --servers 1 --agents 2 --registry-create dev-regi
 docker tag <image-name>:<image-tag> k3d-<registry-name>:<registry-port>/<image-name>:<image-tag>
 ```
 
-example: `docker tag rgms:feature_GPB_2287 k3d-dev-registry.localhost:12345/rgms:feature_GPB_2287`
+example: `docker tag demo-app:v1 k3d-dev-registry.localhost:12345/demo-app:v1`
 
 #### Add this to your local /etc/hosts for automatic resolution of `k3d-dev-registry.localhost`
 
@@ -40,7 +40,7 @@ Pushing images to this registry will make them accessible to Pods in k3d cluster
 docker push k3d-<registry-name>:<registry-port>/<image-name>:<image-tag>
 ```
 
-example: `docker push k3d-dev-registry.localhost:12345/rgms:feature_GPB_2287`
+example: `docker push k3d-dev-registry.localhost:12345/demo-app:v1`
 
 ##
 
@@ -111,6 +111,10 @@ k get pods -A
 k get configmaps -A
 # List all secrets in all namespaces
 k get secrets -A
+# List all the k8s resources
+k get all -o wide
+# List all the k8s resources in all namespaces
+k get -A all -o wide
 ```
 
 ```bash
