@@ -10,37 +10,51 @@ brew install k3d
 k3d version
 ```
 
-### Create a local (cluster-name) as dev-cluster with 1 master server and 2 worker agents along with k3d private local-registry with (registry-name) as dev-registry.localhost with expose (registry-port) as 12345
+### Create a local (cluster-name) as `dev-cluster` with 1 master server and 2 worker agents with expose ports 80 (http) and 443 (https) for the load balancer within the k3d cluster
 
 ```bash
-k3d cluster create dev-cluster --servers 1 --agents 2 --registry-create dev-registry.localhost:12345
+k3d cluster create dev-cluster -p "80:80@loadbalancer" -p "443:443@loadbalancer" --servers 1 --agents 2
 ```
 
-#### Tag and push local images to k3d local registry: dev-registry
+### To run you local or custom image in k3d cluster
+
+- Import the image into your cluster (e.g., `dev-cluster`)
 
 ```bash
-docker tag <image-name>:<image-tag> k3d-<registry-name>:<registry-port>/<image-name>:<image-tag>
+k3d --cluster <cluster-name> image import <image-name>:<image-tag>
 ```
 
-example: `docker tag demo-app:v1 k3d-dev-registry.localhost:12345/demo-app:v1`
-
-#### Add this to your local /etc/hosts for automatic resolution of `k3d-dev-registry.localhost`
+e.g.,
 
 ```bash
-127.0.0.1 k3d-<registry-name>
+k3d --cluster dev-cluster image import <image-name>:<image-tag>
+
+k3d -c dev-cluster image import <image-name>:<image-tag>
 ```
 
-#### Add this line to your local `/etc/hosts`
-
-example: `127.0.0.1   k3d-dev-registry.localhost`
-
-Pushing images to this registry will make them accessible to Pods in k3d cluster
+OR
 
 ```bash
-docker push k3d-<registry-name>:<registry-port>/<image-name>:<image-tag>
+k3d --cluster <cluster-name> images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
 ```
 
-example: `docker push k3d-dev-registry.localhost:12345/demo-app:v1`
+e.g.,
+
+```bash
+k3d --cluster dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
+
+k3d -c dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
+```
+
+#### To test if the image is imported correclty in your cluster run the command
+
+```bash
+kubectl run <image-name> --image <image-name>:<image-tag>
+
+k run <image-name> --image <image-name>:<image-tag>
+```
+
+- Now see if a pod with name the `<image-name>` is created
 
 ##
 
@@ -111,10 +125,6 @@ k get pods -A
 k get configmaps -A
 # List all secrets in all namespaces
 k get secrets -A
-# List all the k8s resources
-k get all -o wide
-# List all the k8s resources in all namespaces
-k get -A all -o wide
 ```
 
 ```bash
@@ -137,3 +147,4 @@ k delete -f <yaml-file-path>
 k delete -f <deploymnet-service-file.yaml>
 k delete -f <config-maps-file.yaml>
 ```
+
