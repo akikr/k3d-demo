@@ -51,25 +51,19 @@ k3d -c dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<im
 
 ```sh
 docker exec k3d-<cluster-name>-server-<number> crictl images
+# OR
+docker exec k3d-<cluster-name>-agent-<number> crictl images
 ```
 
-e.g., To see images present in `dev-cluster`
+e.g., To see images present in K3d: `dev-cluster`
 
 ```sh
 docker exec k3d-dev-cluster-server-0 crictl images
 ```
 
-#### To test if the image is imported correclty in your cluster run the command
+#### NOTE: If using image-tag as:`latest` then please set `imagePullPolicy: Never` in the manifests yaml files, It's a [K3d issue](https://github.com/k3d-io/k3d/discussions/925)
 
-```sh
-kubectl run <image-name> --image <image-name>:<image-tag>
-# OR
-k run <image-name> --image <image-name>:<image-tag>
-```
-
-- Now see if a pod with name the `<image-name>` is created
-
-##
+---
 
 #### List the local clusters
 
@@ -114,7 +108,9 @@ kubectl cluster-info dump
 #### Using kubectl commands
 
 ```sh
-# Display the k3d cluster config
+# Display the cluster events
+k get events
+# Display the cluster config
 k config view
 # Display list of contexts
 k config get-contexts
@@ -160,4 +156,3 @@ k delete -f <yaml-file-path>
 k delete -f <deploymnet-service-file.yaml>
 k delete -f <config-maps-file.yaml>
 ```
-
