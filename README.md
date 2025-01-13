@@ -47,9 +47,21 @@ k3d --cluster dev-cluster images import <image-name-1>:<image-tag-1> <image-name
 k3d -c dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
 ```
 
+#### To see if the images are imported into k3d cluster
+
+```sh
+docker exec k3d-<cluster-name>-server-<number> crictl images
+```
+
+e.g., To see images present in `dev-cluster`
+
+```sh
+docker exec k3d-dev-cluster-server-0 crictl images
+```
+
 #### To test if the image is imported correclty in your cluster run the command
 
-```bash
+```sh
 kubectl run <image-name> --image <image-name>:<image-tag>
 # OR
 k run <image-name> --image <image-name>:<image-tag>
@@ -69,7 +81,7 @@ k3d cluster ls
 
 #### Stop the local development-cluster
 
-```bash
+```sh
 k3d cluster stop dev-cluster
 ```
 
