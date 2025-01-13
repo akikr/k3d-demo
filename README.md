@@ -2,47 +2,48 @@
 
 ## Refer: [k3d.io](https://k3d.io) a wrapper of K3s(Lightweight Kubernetes: [k3s.io](https://github.com/k3s-io/k3s)) in docker
 
-## K3d commands
+### Install K3d via [k3d-installers](https://k3d.io/stable/#other-installers)
 
-```bash
-brew install k3d
+#### K3d commands:-
 
+```sh
+# See K3d version after installation
 k3d version
 ```
 
-### Create a local (cluster-name) as `dev-cluster` with 1 master server and 2 worker agents with expose ports 80 (http) and 443 (https) for the load balancer within the k3d cluster
+#### Create a local (cluster-name) as `dev-cluster` with 1 master server and 2 worker agents with expose ports 80 (http) and 443 (https) for the load balancer within the k3d cluster
 
-```bash
+```sh
 k3d cluster create dev-cluster -p "80:80@loadbalancer" -p "443:443@loadbalancer" --servers 1 --agents 2
 ```
 
-### To run you local or custom image in k3d cluster
+#### To run you local or custom image in k3d cluster
 
 - Import the image into your cluster (e.g., `dev-cluster`)
 
-```bash
+```sh
 k3d --cluster <cluster-name> image import <image-name>:<image-tag>
 ```
 
 e.g.,
 
-```bash
+```sh
 k3d --cluster dev-cluster image import <image-name>:<image-tag>
-
+# OR
 k3d -c dev-cluster image import <image-name>:<image-tag>
 ```
 
 OR
 
-```bash
+```sh
 k3d --cluster <cluster-name> images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
 ```
 
 e.g.,
 
-```bash
+```sh
 k3d --cluster dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
-
+# OR
 k3d -c dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<image-tag-2>
 ```
 
@@ -50,7 +51,7 @@ k3d -c dev-cluster images import <image-name-1>:<image-tag-1> <image-name-2>:<im
 
 ```bash
 kubectl run <image-name> --image <image-name>:<image-tag>
-
+# OR
 k run <image-name> --image <image-name>:<image-tag>
 ```
 
@@ -58,49 +59,49 @@ k run <image-name> --image <image-name>:<image-tag>
 
 ##
 
-### List the local clusters
+#### List the local clusters
 
-```bash
+```sh
 k3d cluster list
-
+# OR
 k3d cluster ls
 ```
 
-### Stop the local development-cluster
+#### Stop the local development-cluster
 
 ```bash
 k3d cluster stop dev-cluster
 ```
 
-### Start a local development-cluster
+#### Start a local development-cluster
 
-```bash
+```sh
 k3d cluster start dev-cluster
 ```
 
-### Delete a local development-cluster
+#### Delete a local development-cluster
 
-```bash
+```sh
 k3d cluster delete dev-cluster
 ```
 
-### K3d list nodes
+#### K3d list nodes
 
-```bash
+```sh
 k3d node list
 ```
 
-### Using kubectl on k3d local-cluster
+#### Using kubectl on k3d local-cluster
 
-```bash
+```sh
 kubectl cluster-info
-
-kubectl cluster-info dump | less
+# OR
+kubectl cluster-info dump
 ```
 
-### Using kubectl commands
+#### Using kubectl commands
 
-```bash
+```sh
 # Display the k3d cluster config
 k config view
 # Display list of contexts
@@ -111,7 +112,7 @@ k config current-context
 k config use-context dev-cluster
 ```
 
-```bash
+```sh
 # List all nodes in all namespaces
 k get nodes -A
 # List all services in all namespaces
@@ -127,7 +128,7 @@ k get configmaps -A
 k get secrets -A
 ```
 
-```bash
+```sh
 # Watch all pods
 k get pods -w -o wide
 # Watch all deployments
@@ -138,7 +139,7 @@ k get svc -w -o wide
 k get configmaps -w -o wide
 ```
 
-```bash
+```sh
 # Create kubectl resources
 k apply -f <yaml-file-path>
 # Delete kubectl resources
